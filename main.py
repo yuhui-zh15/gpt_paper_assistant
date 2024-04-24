@@ -148,7 +148,7 @@ def get_authors(
             # add a 20ms wait time to avoid rate limiting
             # otherwise, semantic scholar aggressively rate limits, so do 1s
             if S2_API_KEY is not None:
-                time.sleep(0.02)
+                time.sleep(1.0)  # YUHUI: changed this from 0.02 to 1.0
             else:
                 time.sleep(1.0)
     return author_metadata_dict
@@ -159,6 +159,7 @@ def get_papers_from_arxiv(config):
     paper_set = set()
     for area in area_list:
         papers = get_papers_from_arxiv_rss_api(area.strip(), config)
+        print("Number of papers in " + area + ":" + str(len(papers)))
         paper_set.update(set(papers))
     if config["OUTPUT"].getboolean("debug_messages"):
         print("Number of papers:" + str(len(paper_set)))
